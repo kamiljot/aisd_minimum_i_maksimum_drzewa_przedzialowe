@@ -50,11 +50,69 @@ node* MakeRoot(int* tab, int m){
         if (tab[i] > root->max){
             root->max = tab[i];
         }
-        root->start = 0;
-        root->end = m - 1;
-        root->parent = nullptr;
-        root->left = nullptr;
-        root->right = nullptr;
+    }
+    root->start = 0;
+    cout << root->end << endl;
+    root->end = m - 1;
+    cout << root->end << endl;
+    root->parent = nullptr;
+    root->left = nullptr;
+    root->right = nullptr;
+
+    return root;
+}
+
+node* MakeChild(node* root, int* tab, int start, int end){
+    root->left = new node;
+    root->right = new node;
+
+    root->left->parent = root;
+    root->left->left = nullptr;
+    root->left->right = nullptr;
+
+    root->left->min = tab[start];
+    root->left->max = tab[start];
+
+    if (end - start == 1){
+        root->left->start = start;
+        root->left->end = start;
+    } else {
+        for (int i = start; i < ((end - start) / 2); i++){
+            if (tab[i] < root->left->min){
+                root->left->min = tab[i];
+            }
+            if (tab[i] > root->left->max){
+                root->left->max = tab[i];
+            }
+        }
+        root->left->start = start;
+        root->left->end = ((end - start) / 2);
+        cout << root->left->end << endl;
+        MakeChild(root->left, tab, root->left->start, root->left->end);
+    }
+
+    root->right->parent = root;
+    root->right->left = nullptr;
+    root->right->right = nullptr;
+
+    root->right->min = tab[end];
+    root->right->max = tab[end];
+
+    if (end - start == 1){
+        root->right->start = end;
+        root->right->end = end;
+    } else {
+        for (int i = ((end - start) / 2 + 1); i < end; i++){
+            if (tab[i] < root->right->min){
+                root->right->min = tab[i];
+            }
+            if (tab[i] > root->right->max){
+                root->right->max = tab[i];
+            }
+        }
+        root->right->start = ((end - start) / 2 + 1);
+        root->left->end = end;
+        MakeChild(root->right, tab, root->right->start, root->right->end);
     }
     return root;
 }
@@ -71,10 +129,6 @@ void PrintRoot(node* root){
     cout << root->min << " " << root->max << endl;
 }
 
-node* MakeIntervalTree(int* tab, int m, node* root){
-
-
-}
 
 
 int main() {
@@ -87,8 +141,10 @@ int main() {
     tab = Loader(n, m);
     PrintTab(tab, m);
 
-
     root = MakeRoot(tab, m);
+
+    root = MakeChild(root, tab, root->start, root->end);
+
 
     PrintRoot(root);
 
