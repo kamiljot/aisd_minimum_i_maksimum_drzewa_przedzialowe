@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.13)
+project(aisd_minimum_i_maksimum_drzewa_przedzialowe)
+
+set(CMAKE_CXX_STANDARD 17)
+
+add_executable(aisd_minimum_i_maksimum_drzewa_przedzialowe main.cpp)
