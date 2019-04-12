@@ -62,7 +62,7 @@ node* MakeRoot(int* tab, int m){
     return root;
 }
 
-node* MakeChild(node* root, int* tab, int start, int end){
+node* MakeChild(node* root, int* tab){
     root->left = new node;
     root->right = new node;
 
@@ -70,25 +70,25 @@ node* MakeChild(node* root, int* tab, int start, int end){
     root->left->left = nullptr;
     root->left->right = nullptr;
 
-    root->left->min = tab[start];
-    root->left->max = tab[start];
+    root->left->min = tab[root->start];
+    root->left->max = tab[root->start];
 
     root->right->parent = root;
     root->right->left = nullptr;
     root->right->right = nullptr;
 
-    root->right->min = tab[end];
-    root->right->max = tab[end];
+    root->right->min = tab[root->end];
+    root->right->max = tab[root->end];
 
-    if (end - start == 1 || end == start){
-        root->left->start = start;
-        root->left->end = start;
-        root->right->start = end;
-        root->right->end = end;
+    if (root->end - root->start == 1 || root->end == root->start){
+        root->left->start = root->start;
+        root->left->end = root->start;
+        root->right->start = root->end;
+        root->right->end = root->end;
     } else { 
-        if (start < end){
+        if (root->start < root->end){
         
-            for (int i = start; i < ((end - start) / 2); i++){
+            for (int i = root->start; i < ((root->end - root->start) / 2); i++){
                 if (tab[i] < root->left->min){
                     root->left->min = tab[i];
                 }
@@ -96,7 +96,7 @@ node* MakeChild(node* root, int* tab, int start, int end){
                     root->left->max = tab[i];
                 }
             }
-            for (int i = ((end - start) / 2 + 1); i < end; i++){
+            for (int i = ((root->end - root->start) / 2 + 1); i < root->end; i++){
                 if (tab[i] < root->right->min){
                     root->right->min = tab[i];
                 }
@@ -105,13 +105,17 @@ node* MakeChild(node* root, int* tab, int start, int end){
                 }
             }
 
-            root->left->start = start;
-            root->left->end = ((end - start) / 2);
-            root->right->start = ((end - start) / 2 + 1);
+            root->left->start = root->start;
+            cout << root->left->start << endl;
+            root->left->end = ((root->end - root->start) / 2);
+            cout << root->left->end << endl;
+            root->right->start = ((root->end - root->start) / 2 + 1);
             cout << root->right->start << endl;
-            root->right->end = end;
-            MakeChild(root->left, tab, root->left->start, root->left->end);
-            MakeChild(root->right, tab, root->right->start, root->right->end);
+            root->right->end = root->end;
+            cout << root->right->end << endl;
+
+            MakeChild(root->left, tab);
+            MakeChild(root->right, tab);
     
             }
         }
@@ -144,7 +148,7 @@ int main() {
 
     root = MakeRoot(tab, m);
 
-    root = MakeChild(root, tab, root->start, root->end);
+    root = MakeChild(root, tab);
 
 
     PrintRoot(root);
