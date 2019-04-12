@@ -85,32 +85,36 @@ node* MakeChild(node* root, int* tab, int start, int end){
         root->left->end = start;
         root->right->start = end;
         root->right->end = end;
-    } else {
-        for (int i = start; i < ((end - start) / 2); i++){
-            if (tab[i] < root->left->min){
-                root->left->min = tab[i];
+    } else { 
+        if (start < end){
+        
+            for (int i = start; i < ((end - start) / 2); i++){
+                if (tab[i] < root->left->min){
+                    root->left->min = tab[i];
+                }
+                if (tab[i] > root->left->max){
+                    root->left->max = tab[i];
+                }
             }
-            if (tab[i] > root->left->max){
-                root->left->max = tab[i];
+            for (int i = ((end - start) / 2 + 1); i < end; i++){
+                if (tab[i] < root->right->min){
+                    root->right->min = tab[i];
+                }
+                if (tab[i] > root->right->max){
+                    root->right->max = tab[i];
+                }
             }
-        }
-        for (int i = ((end - start) / 2 + 1); i < end; i++){
-            if (tab[i] < root->right->min){
-                root->right->min = tab[i];
-            }
-            if (tab[i] > root->right->max){
-                root->right->max = tab[i];
-            }
-        }
 
-        root->left->start = start;
-        root->left->end = ((end - start) / 2);
-        root->right->start = ((end - start) / 2 + 1);
-        cout << root->right->start << endl;
-        root->right->end = end;
-        MakeChild(root->left, tab, root->left->start, root->left->end);
-        MakeChild(root->right, tab, root->right->start, root->right->end);
-    }
+            root->left->start = start;
+            root->left->end = ((end - start) / 2);
+            root->right->start = ((end - start) / 2 + 1);
+            cout << root->right->start << endl;
+            root->right->end = end;
+            MakeChild(root->left, tab, root->left->start, root->left->end);
+            MakeChild(root->right, tab, root->right->start, root->right->end);
+    
+            }
+        }
     return root;
 }
 
